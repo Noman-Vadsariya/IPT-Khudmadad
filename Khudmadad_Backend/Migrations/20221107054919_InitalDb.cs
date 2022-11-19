@@ -1,0 +1,133 @@
+﻿using Microsoft.EntityFrameworkCore.Migrations;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
+
+#nullable disable
+
+namespace Khudmadad_Backend.Migrations
+{
+    public partial class InitalDb : Migration
+    {
+        protected override void Up(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.CreateTable(
+                name: "Roles",
+                columns: table => new
+                {
+                    roleId = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    role = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Roles", x => x.roleId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    userId = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    roleId = table.Column<int>(type: "integer", nullable: false),
+                    userName = table.Column<string>(type: "text", nullable: false),
+                    firstName = table.Column<string>(type: "text", nullable: false),
+                    lastName = table.Column<string>(type: "text", nullable: false),
+                    password = table.Column<string>(type: "text", nullable: false),
+                    dob = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.userId);
+                    table.ForeignKey(
+                        name: "FK_Users_Roles_roleId",
+                        column: x => x.roleId,
+                        principalTable: "Roles",
+                        principalColumn: "roleId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Gig",
+                columns: table => new
+                {
+                    gigId = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    creatorId = table.Column<int>(type: "integer", nullable: false),
+                    description = table.Column<string>(type: "text", nullable: false),
+                    deadline = table.Column<string>(type: "text", nullable: false),
+                    pay = table.Column<double>(type: "double precision", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Gig", x => x.gigId);
+                    table.ForeignKey(
+                        name: "FK_Gig_Users_creatorId",
+                        column: x => x.creatorId,
+                        principalTable: "Users",
+                        principalColumn: "userId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Offers",
+                columns: table => new
+                {
+                    gigId = table.Column<int>(type: "integer", nullable: false),
+                    userId = table.Column<int>(type: "integer", nullable: false),
+                    pay = table.Column<double>(type: "double precision", nullable: false),
+                    UsersuserId = table.Column<int>(type: "integer", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Offers", x => new { x.gigId, x.userId });
+                    table.ForeignKey(
+                        name: "FK_Offers_Gig_gigId",
+                        column: x => x.gigId,
+                        principalTable: "Gig",
+                        principalColumn: "gigId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Offers_Users_UsersuserId",
+                        column: x => x.UsersuserId,
+                        principalTable: "Users",
+                        principalColumn: "userId");
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Gig_creatorId",
+                table: "Gig",
+                column: "creatorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Offers_UsersuserId",
+                table: "Offers",
+                column: "UsersuserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_roleId",
+                table: "Users",
+                column: "roleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_userName",
+                table: "Users",
+                column: "userName",
+                unique: true);
+        }
+
+        protected override void Down(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.DropTable(
+                name: "Offers");
+
+            migrationBuilder.DropTable(
+                name: "Gig");
+
+            migrationBuilder.DropTable(
+                name: "Users");
+
+            migrationBuilder.DropTable(
+                name: "Roles");
+        }
+    }
+}

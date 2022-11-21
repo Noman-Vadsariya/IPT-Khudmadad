@@ -2,6 +2,7 @@
 using Khudmadad_Backend.Models;
 using Khudmadad_Backend.DbUtils;
 using Microsoft.AspNetCore.Mvc;
+using System.Globalization;
 
 namespace Khudmadad_Backend.Controllers
 {
@@ -38,9 +39,9 @@ namespace Khudmadad_Backend.Controllers
 
         }
 
-        //GET: api/Users/5
-        [HttpGet("{id}")]
-        public ActionResult Details(int id)
+        //GET: api/Users/userid/{id}
+        [HttpGet("userid/{id}")]
+        public ActionResult GetUserById(int id)
         {
             ResponseType type = ResponseType.Success;
             try
@@ -59,8 +60,29 @@ namespace Khudmadad_Backend.Controllers
 
         }
 
-        // GET: api/Users/Create
-        [HttpPost("Create")]
+        //GET: api/Users/username/{userName}
+        [HttpGet("username/{userName}")]
+        public ActionResult GetUserByUsername(string userName)
+        {
+            ResponseType type = ResponseType.Success;
+            try
+            {
+                UsersModel? data = _db.GetUserByUsername(userName);
+                if (data == null)
+                {
+                    type = ResponseType.NotFound;
+                }
+                return Ok(ResponseHandler.GetAppResponse(type, data));
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ResponseHandler.GetExceptionResponse(ex));
+            }
+
+        }
+
+        // GET: api/Users/create
+        [HttpPost("create")]
         public ActionResult Create(UsersModel user)
         {
             try
@@ -73,5 +95,40 @@ namespace Khudmadad_Backend.Controllers
                 return BadRequest(ResponseHandler.GetExceptionResponse(ex));
             }
         }
+
+        [HttpPut("update")]
+        public ApiResponse UpdateUser(UsersModel user)
+        {
+            try
+            {
+                var _u = _db.UpdateUser(user);
+                if (_u)
+                    return ResponseHandler.GetAppResponse(ResponseType.Success, _u);
+                else
+                    return ResponseHandler.GetAppResponse(ResponseType.Failure, _u);
+            }
+            catch (Exception ex)
+            {
+                return ResponseHandler.GetExceptionResponse(ex);
+            }
+        }
+
+        [HttpDelete("delete")]
+        public ApiResponse DeleteOffer(UsersModel user)
+        {
+            try
+            {
+                var _u = _db.DeleteUser(user);
+                if (_u)
+                    return ResponseHandler.GetAppResponse(ResponseType.Success, _u);
+                else
+                    return ResponseHandler.GetAppResponse(ResponseType.Failure, _u);
+            }
+            catch (Exception ex)
+            {
+                return ResponseHandler.GetExceptionResponse(ex);
+            }
+        }
+
     }
 }

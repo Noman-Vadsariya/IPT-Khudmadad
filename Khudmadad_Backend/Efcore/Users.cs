@@ -22,6 +22,13 @@ namespace Khudmadad_Backend.EfCore
         public string password { get; set; }
         public string dob { get; set; }
 
+        [DataType(DataType.PhoneNumber)]
+        [StringLength(11)]
+        public string phoneNumber { get; set; }
+
+        [AllowNull]
+        public string? description { get; set; }
+       
         public ICollection<Offers> offer { get; set; }
         public List<Gig> gig { get; set; }
     }

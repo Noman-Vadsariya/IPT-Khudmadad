@@ -75,5 +75,39 @@ namespace Khudmadad_Backend.Controllers
                 return BadRequest(ResponseHandler.GetExceptionResponse(ex));
             }
         }
+
+        [HttpPut("update")]
+        public ApiResponse UpdateGig(GigModel gig)
+        {
+            try
+            {
+                var _g = _db.UpdateGigInfo(gig);
+                if (_g)
+                    return ResponseHandler.GetAppResponse(ResponseType.Success, _g);
+                else
+                    return ResponseHandler.GetAppResponse(ResponseType.Failure, _g);
+            }
+            catch (Exception ex)
+            {
+                return ResponseHandler.GetExceptionResponse(ex);
+            }
+        }
+
+        [HttpDelete("delete")]
+        public ApiResponse DeleteGig(GigModel gig)
+        {
+            try
+            {
+                var _g = _db.DeleteGig(gig);
+                if (_g)
+                    return ResponseHandler.GetAppResponse(ResponseType.Success, _g);
+                else
+                    return ResponseHandler.GetAppResponse(ResponseType.Failure, _g);
+            }
+            catch (Exception ex)
+            {
+                return ResponseHandler.GetExceptionResponse(ex);
+            }
+        }
     }
 }

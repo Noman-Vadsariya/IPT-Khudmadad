@@ -99,7 +99,7 @@ namespace Khudmadad_Backend.Controllers
             }
         }
 
-        [HttpPut("offerstatus")]
+        [HttpPut("UpdateStatus")]
         public ApiResponse UpdateOfferStatus(OfferModel offer)
         {
             try

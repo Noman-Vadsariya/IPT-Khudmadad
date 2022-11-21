@@ -5,7 +5,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Khudmadad_Backend.Migrations
 {
-    public partial class InitalDb : Migration
+    public partial class InitialDb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -33,7 +33,8 @@ namespace Khudmadad_Backend.Migrations
                     firstName = table.Column<string>(type: "text", nullable: false),
                     lastName = table.Column<string>(type: "text", nullable: false),
                     password = table.Column<string>(type: "text", nullable: false),
-                    dob = table.Column<string>(type: "text", nullable: false)
+                    dob = table.Column<string>(type: "text", nullable: false),
+                    description = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -73,13 +74,13 @@ namespace Khudmadad_Backend.Migrations
                 columns: table => new
                 {
                     gigId = table.Column<int>(type: "integer", nullable: false),
-                    userId = table.Column<int>(type: "integer", nullable: false),
+                    freelancerId = table.Column<int>(type: "integer", nullable: false),
                     pay = table.Column<double>(type: "double precision", nullable: false),
-                    UsersuserId = table.Column<int>(type: "integer", nullable: true)
+                    status = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Offers", x => new { x.gigId, x.userId });
+                    table.PrimaryKey("PK_Offers", x => new { x.gigId, x.freelancerId });
                     table.ForeignKey(
                         name: "FK_Offers_Gig_gigId",
                         column: x => x.gigId,
@@ -87,10 +88,11 @@ namespace Khudmadad_Backend.Migrations
                         principalColumn: "gigId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Offers_Users_UsersuserId",
-                        column: x => x.UsersuserId,
+                        name: "FK_Offers_Users_freelancerId",
+                        column: x => x.freelancerId,
                         principalTable: "Users",
-                        principalColumn: "userId");
+                        principalColumn: "userId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -99,9 +101,9 @@ namespace Khudmadad_Backend.Migrations
                 column: "creatorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Offers_UsersuserId",
+                name: "IX_Offers_freelancerId",
                 table: "Offers",
-                column: "UsersuserId");
+                column: "freelancerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_roleId",

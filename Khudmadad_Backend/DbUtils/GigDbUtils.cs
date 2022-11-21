@@ -66,5 +66,33 @@ namespace Khudmadad_Backend.DbUtils
                 return g;
             }
         }
+
+        public bool UpdateGigInfo(GigModel gig)
+        {
+            var _g = _context.gig.Where(g => g.gigId.Equals(gig.gigId)).FirstOrDefault();
+            if (_g == null)
+                return false;
+            else
+            {
+                _g.pay = gig.pay;
+                _g.description = gig.description;
+                _context.SaveChanges();
+                return true;
+            }
+        }
+
+        public bool DeleteGig(GigModel gig)
+        {
+            var _g = _context.gig.Where(g => g.gigId.Equals(gig.gigId)).FirstOrDefault();
+            if (_g == null)
+                return false;
+            else
+            {
+                _context.gig.Remove(_g);
+                _context.SaveChanges();
+                return true;
+            }
+        }
+
     }
 }

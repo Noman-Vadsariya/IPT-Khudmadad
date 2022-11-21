@@ -11,8 +11,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Khudmadad_Backend.Migrations
 {
     [DbContext(typeof(Ef_DataContext))]
-    [Migration("20221107063212_OfferForeign")]
-    partial class OfferForeign
+    [Migration("20221121142348_UserNumber")]
+    partial class UserNumber
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -63,6 +63,9 @@ namespace Khudmadad_Backend.Migrations
                     b.Property<double>("pay")
                         .HasColumnType("double precision");
 
+                    b.Property<bool>("status")
+                        .HasColumnType("boolean");
+
                     b.HasKey("gigId", "freelancerId");
 
                     b.HasIndex("freelancerId");
@@ -95,6 +98,9 @@ namespace Khudmadad_Backend.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("userId"));
 
+                    b.Property<string>("description")
+                        .HasColumnType("text");
+
                     b.Property<string>("dob")
                         .IsRequired()
                         .HasColumnType("text");
@@ -108,6 +114,10 @@ namespace Khudmadad_Backend.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("password")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("phoneNumber")
                         .IsRequired()
                         .HasColumnType("text");
 

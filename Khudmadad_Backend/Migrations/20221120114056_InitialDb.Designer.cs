@@ -11,8 +11,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Khudmadad_Backend.Migrations
 {
     [DbContext(typeof(Ef_DataContext))]
-    [Migration("20221109055107_OfferModelUpdate")]
-    partial class OfferModelUpdate
+    [Migration("20221120114056_InitialDb")]
+    partial class InitialDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -97,6 +97,10 @@ namespace Khudmadad_Backend.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("userId"));
+
+                    b.Property<string>("description")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("dob")
                         .IsRequired()

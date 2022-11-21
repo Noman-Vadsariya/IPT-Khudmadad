@@ -15,7 +15,7 @@ namespace Khudmadad_Backend.EfCore
             modelBuilder.Entity<Users>()
                 .HasIndex(u => u.userName)
                 .IsUnique();
-
+            
             modelBuilder.Entity<Users>()
                 .HasOne(p => p.Role)
                 .WithMany(b => b.users)

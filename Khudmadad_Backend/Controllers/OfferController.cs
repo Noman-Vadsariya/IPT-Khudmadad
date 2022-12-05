@@ -83,6 +83,28 @@ namespace Khudmadad_Backend.Controllers
                 return ResponseHandler.GetExceptionResponse(ex);
             }
         }
+        
+        //GET: api/Offer/clientId/5
+        [HttpGet("clientId/{clientId}")]
+        public ApiResponse GetOffersByClientId(int clientId)
+        {
+            ResponseType type = ResponseType.Success;
+            Console.WriteLine("\n\n" + clientId + "\nHello");
+            try
+            {
+                IEnumerable<GigOfferModel>? data = _db.GetOffersByClientId(clientId);
+
+                if (data == null)
+                {
+                    type = ResponseType.NotFound;
+                }
+                return ResponseHandler.GetAppResponse(type, data);
+            }
+            catch (Exception ex)
+            {
+                return ResponseHandler.GetExceptionResponse(ex);
+            }
+        }
 
         // GET: api/Offer/Create
         [HttpPost("Create")]
@@ -115,13 +137,31 @@ namespace Khudmadad_Backend.Controllers
                 return ResponseHandler.GetExceptionResponse(ex);
             }
         }
-        
+        //Delete
         [HttpDelete("delete")]
         public ApiResponse DeleteOffer(OfferModel offer)
         {
             try
             {
                 var _o = _db.DeleteOffer(offer);
+                if(_o)
+                    return ResponseHandler.GetAppResponse(ResponseType.Success, _o);
+                else
+                    return ResponseHandler.GetAppResponse(ResponseType.Failure, _o);
+            }
+            catch (Exception ex)
+            {
+                return ResponseHandler.GetExceptionResponse(ex);
+            }
+        }
+        
+        //Delete all offers with given gigId accept the one accepted by client
+        [HttpDelete("delete/{gigId}")]
+        public ApiResponse DeleteOfferGivenGigId(int gigId)
+        {
+            try
+            {
+                var _o = _db.DeleteOffersWithGigId(gigId);
                 if(_o)
                     return ResponseHandler.GetAppResponse(ResponseType.Success, _o);
                 else

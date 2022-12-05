@@ -38,6 +38,50 @@ namespace Khudmadad_Backend.Controllers
                 return BadRequest(ResponseHandler.GetExceptionResponse(ex));
             }
 
+        } 
+        
+        // GET: api/Gig/creatorId/{creatorId}
+        [HttpGet("creatorId/{creatorId}")]
+        public IActionResult GetGigByCreatorId(int creatorId)
+        {
+            ResponseType type = ResponseType.Success;
+            try
+            {
+                IEnumerable<GigModel>? data = _db.GetGigsByCreatorId(creatorId);
+
+                if (data == null)
+                {
+                    type = ResponseType.NotFound;
+                }
+                return Ok(ResponseHandler.GetAppResponse(type, data));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ResponseHandler.GetExceptionResponse(ex));
+            }
+
+        }
+        
+        // GET: api/Gig/unaccepted
+        [HttpGet("unaccepted")]
+        public IActionResult GetUnacceptedGigs()
+        {
+            ResponseType type = ResponseType.Success;
+            try
+            {
+                IEnumerable<GigModel>? data = _db.GetUnacceptedGigs();
+
+                if (data == null)
+                {
+                    type = ResponseType.NotFound;
+                }
+                return Ok(ResponseHandler.GetAppResponse(type, data));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ResponseHandler.GetExceptionResponse(ex));
+            }
+
         }
 
         //GET: api/Gigs/5

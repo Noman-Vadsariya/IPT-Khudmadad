@@ -1,21 +1,22 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Khudmadad_Backend.Migrations
+namespace KhudmadadBackend.Migrations
 {
+    /// <inheritdoc />
     public partial class InitialDb : Migration
     {
+        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
                 name: "Roles",
                 columns: table => new
                 {
-                    roleId = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    role = table.Column<string>(type: "text", nullable: false)
+                    roleId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    role = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -26,15 +27,17 @@ namespace Khudmadad_Backend.Migrations
                 name: "Users",
                 columns: table => new
                 {
-                    userId = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    roleId = table.Column<int>(type: "integer", nullable: false),
-                    userName = table.Column<string>(type: "text", nullable: false),
-                    firstName = table.Column<string>(type: "text", nullable: false),
-                    lastName = table.Column<string>(type: "text", nullable: false),
-                    password = table.Column<string>(type: "text", nullable: false),
-                    dob = table.Column<string>(type: "text", nullable: false),
-                    description = table.Column<string>(type: "text", nullable: true)
+                    userId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    roleId = table.Column<int>(type: "int", nullable: false),
+                    userName = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    firstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    lastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    dob = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    phoneNumber = table.Column<string>(type: "nvarchar(11)", maxLength: 11, nullable: false),
+                    description = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -51,12 +54,13 @@ namespace Khudmadad_Backend.Migrations
                 name: "Gig",
                 columns: table => new
                 {
-                    gigId = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    creatorId = table.Column<int>(type: "integer", nullable: false),
-                    description = table.Column<string>(type: "text", nullable: false),
-                    deadline = table.Column<string>(type: "text", nullable: false),
-                    pay = table.Column<double>(type: "double precision", nullable: false)
+                    gigId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    creatorId = table.Column<int>(type: "int", nullable: false),
+                    gigName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    deadline = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    pay = table.Column<double>(type: "float", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -73,10 +77,10 @@ namespace Khudmadad_Backend.Migrations
                 name: "Offers",
                 columns: table => new
                 {
-                    gigId = table.Column<int>(type: "integer", nullable: false),
-                    freelancerId = table.Column<int>(type: "integer", nullable: false),
-                    pay = table.Column<double>(type: "double precision", nullable: false),
-                    status = table.Column<bool>(type: "boolean", nullable: false)
+                    gigId = table.Column<int>(type: "int", nullable: false),
+                    freelancerId = table.Column<int>(type: "int", nullable: false),
+                    pay = table.Column<double>(type: "float", nullable: false),
+                    status = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -85,14 +89,12 @@ namespace Khudmadad_Backend.Migrations
                         name: "FK_Offers_Gig_gigId",
                         column: x => x.gigId,
                         principalTable: "Gig",
-                        principalColumn: "gigId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "gigId");
                     table.ForeignKey(
                         name: "FK_Offers_Users_freelancerId",
                         column: x => x.freelancerId,
                         principalTable: "Users",
-                        principalColumn: "userId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "userId");
                 });
 
             migrationBuilder.CreateIndex(
@@ -117,6 +119,7 @@ namespace Khudmadad_Backend.Migrations
                 unique: true);
         }
 
+        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(

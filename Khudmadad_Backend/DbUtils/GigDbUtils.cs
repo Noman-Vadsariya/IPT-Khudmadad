@@ -28,6 +28,66 @@ namespace Khudmadad_Backend.DbUtils
                 {
                     creatorId = row.creatorId,
                     gigId = row.gigId,
+                    gigName = row.gigName,
+                    deadline = row.deadline,
+                    description = row.description,
+                    pay = row.pay
+                }));
+
+                return response;
+            }
+        }
+        
+        public List<GigModel>? GetUnacceptedGigs()
+        {
+            List<GigModel> response = new List<GigModel>();
+            var gigList = (from gig in _context.gig
+                           join offer in _context.offer on gig.gigId equals offer.gigId into ps_jointable 
+                           from p in ps_jointable.DefaultIfEmpty()
+                           where p.status != true
+                           select new
+                           {
+                               creatorId = gig.creatorId,
+                               gigId = gig.gigId,
+                               gigName = gig.gigName,
+                               description = gig.description,
+                               deadline = gig.deadline,
+                               pay = gig.pay
+                           }).ToList();
+
+            if (gigList == null)
+                return null;
+            else
+            {
+                gigList.ForEach(row => response.Add(new GigModel()
+                {
+                    creatorId = row.creatorId,
+                    gigId = row.gigId,
+                    gigName = row.gigName,
+                    deadline = row.deadline,
+                    description = row.description,
+                    pay = row.pay
+                }));
+
+                return response;
+            }
+        }
+
+        public List<GigModel>? GetGigsByCreatorId(int creatorId)
+        {
+            List<GigModel> response = new List<GigModel>();
+            var gigList = _context.gig.Where(o => o.creatorId.Equals(creatorId)).ToList();
+
+            if (gigList == null)
+                return null;
+
+            else
+            {
+                gigList.ForEach(row => response.Add(new GigModel()
+                {
+                    creatorId = row.creatorId,
+                    gigId = row.gigId,
+                    gigName = row.gigName,
                     deadline = row.deadline,
                     description = row.description,
                     pay = row.pay
@@ -42,6 +102,7 @@ namespace Khudmadad_Backend.DbUtils
             Gig g = new Gig();
             g.creatorId = gig.creatorId;
             g.deadline = gig.deadline;
+            g.gigName = gig.gigName;
             g.description = gig.description;
             g.pay = gig.pay;
 
@@ -59,6 +120,7 @@ namespace Khudmadad_Backend.DbUtils
             {
                 g.creatorId = gig.creatorId;
                 g.gigId = gig.gigId;
+                g.gigName = gig.gigName;
                 g.deadline = gig.deadline;
                 g.description = gig.description;
                 g.pay = gig.pay;
@@ -76,6 +138,8 @@ namespace Khudmadad_Backend.DbUtils
             {
                 _g.pay = gig.pay;
                 _g.description = gig.description;
+                _g.gigName = gig.gigName;
+                _g.deadline = gig.deadline;
                 _context.SaveChanges();
                 return true;
             }

@@ -19,25 +19,29 @@ namespace Khudmadad_Backend.EfCore
             modelBuilder.Entity<Users>()
                 .HasOne(p => p.Role)
                 .WithMany(b => b.users)
-                .HasForeignKey(p => p.roleId);
+                .HasForeignKey(p => p.roleId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Gig>()
                 .HasOne(p => p.Creator)
                 .WithMany(b => b.gig)
-                .HasForeignKey(p => p.creatorId);
+                .HasForeignKey(p => p.creatorId)
+                .OnDelete(DeleteBehavior.Cascade);
             
             modelBuilder.Entity<Offers>()
                 .HasKey(nameof(Offers.gigId), nameof(Offers.freelancerId));
-            
+
             modelBuilder.Entity<Offers>()
                 .HasOne<Users>(p => p.freelancer)
                 .WithMany(b => b.offer)
-                .HasForeignKey(p => p.freelancerId);
-            
+                .HasForeignKey(p => p.freelancerId)
+                .OnDelete(DeleteBehavior.Cascade);
+
             modelBuilder.Entity<Offers>()
                 .HasOne<Gig>(p => p.gig)
                 .WithMany(b => b.offer)
-                .HasForeignKey(p => p.gigId);
+                .HasForeignKey(p => p.gigId)
+                .OnDelete(DeleteBehavior.Cascade);
 
         }
 

@@ -2,48 +2,53 @@
 using Khudmadad_Backend.EfCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Khudmadad_Backend.Migrations
+namespace KhudmadadBackend.Migrations
 {
     [DbContext(typeof(Ef_DataContext))]
-    [Migration("20221120114056_InitialDb")]
-    partial class InitialDb
+    [Migration("20221203103838_FKUpdated")]
+    partial class FKUpdated
     {
+        /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.10")
-                .HasAnnotation("Relational:MaxIdentifierLength", 63);
+                .HasAnnotation("ProductVersion", "7.0.0")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
-            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("Khudmadad_Backend.EfCore.Gig", b =>
                 {
                     b.Property<int>("gigId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("gigId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("gigId"));
 
                     b.Property<int>("creatorId")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<string>("deadline")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("description")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("gigName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<double>("pay")
-                        .HasColumnType("double precision");
+                        .HasColumnType("float");
 
                     b.HasKey("gigId");
 
@@ -52,38 +57,17 @@ namespace Khudmadad_Backend.Migrations
                     b.ToTable("Gig");
                 });
 
-            modelBuilder.Entity("Khudmadad_Backend.Efcore.Offers", b =>
-                {
-                    b.Property<int>("gigId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("freelancerId")
-                        .HasColumnType("integer");
-
-                    b.Property<double>("pay")
-                        .HasColumnType("double precision");
-
-                    b.Property<bool>("status")
-                        .HasColumnType("boolean");
-
-                    b.HasKey("gigId", "freelancerId");
-
-                    b.HasIndex("freelancerId");
-
-                    b.ToTable("Offers");
-                });
-
             modelBuilder.Entity("Khudmadad_Backend.EfCore.Roles", b =>
                 {
                     b.Property<int>("roleId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("roleId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("roleId"));
 
                     b.Property<string>("role")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("roleId");
 
@@ -94,36 +78,44 @@ namespace Khudmadad_Backend.Migrations
                 {
                     b.Property<int>("userId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("userId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("userId"));
 
                     b.Property<string>("description")
-                        .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("dob")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("firstName")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("lastName")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("password")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("phoneNumber")
+                        .IsRequired()
+                        .HasMaxLength(11)
+                        .HasColumnType("nvarchar(11)");
 
                     b.Property<int>("roleId")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<string>("userName")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("userId");
 
@@ -135,6 +127,27 @@ namespace Khudmadad_Backend.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("Khudmadad_Backend.Efcore.Offers", b =>
+                {
+                    b.Property<int>("gigId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("freelancerId")
+                        .HasColumnType("int");
+
+                    b.Property<double>("pay")
+                        .HasColumnType("float");
+
+                    b.Property<bool>("status")
+                        .HasColumnType("bit");
+
+                    b.HasKey("gigId", "freelancerId");
+
+                    b.HasIndex("freelancerId");
+
+                    b.ToTable("Offers");
+                });
+
             modelBuilder.Entity("Khudmadad_Backend.EfCore.Gig", b =>
                 {
                     b.HasOne("Khudmadad_Backend.EfCore.Users", "Creator")
@@ -144,6 +157,17 @@ namespace Khudmadad_Backend.Migrations
                         .IsRequired();
 
                     b.Navigation("Creator");
+                });
+
+            modelBuilder.Entity("Khudmadad_Backend.EfCore.Users", b =>
+                {
+                    b.HasOne("Khudmadad_Backend.EfCore.Roles", "Role")
+                        .WithMany("users")
+                        .HasForeignKey("roleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Role");
                 });
 
             modelBuilder.Entity("Khudmadad_Backend.Efcore.Offers", b =>
@@ -163,17 +187,6 @@ namespace Khudmadad_Backend.Migrations
                     b.Navigation("freelancer");
 
                     b.Navigation("gig");
-                });
-
-            modelBuilder.Entity("Khudmadad_Backend.EfCore.Users", b =>
-                {
-                    b.HasOne("Khudmadad_Backend.EfCore.Roles", "Role")
-                        .WithMany("users")
-                        .HasForeignKey("roleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Role");
                 });
 
             modelBuilder.Entity("Khudmadad_Backend.EfCore.Gig", b =>

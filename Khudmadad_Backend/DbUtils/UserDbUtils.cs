@@ -27,13 +27,14 @@ namespace Khudmadad_Backend.DbUtils
                 {
                     userId = row.userId,
                     roleId = row.roleId,
+                    email = row.email,
                     userName = row.userName,
                     password = row.password,
                     firstName = row.firstName,
                     lastName = row.lastName,
                     dob = row.dob,
                     description = row.description,
-                    phoneNumber = row.phoneNumber 
+                    phoneNumber = row.phoneNumber
                 }));
 
                 return response;
@@ -44,6 +45,7 @@ namespace Khudmadad_Backend.DbUtils
         {
             Users u = new Users();
             u.userName = user.userName;
+            u.email = user.email;
             u.roleId = user.roleId;
             u.firstName = user.firstName;
             u.lastName = user.lastName;
@@ -68,6 +70,7 @@ namespace Khudmadad_Backend.DbUtils
                 response.roleId = user.roleId;
                 response.firstName = user.firstName;
                 response.lastName = user.lastName;
+                response.email = user.email;
                 response.userName = user.userName;
                 response.password = user.password;
                 response.dob = user.dob;
@@ -92,6 +95,7 @@ namespace Khudmadad_Backend.DbUtils
                 response.lastName = user.lastName;
                 response.userName = user.userName;
                 response.password = user.password;
+                response.email = user.email;
                 response.dob = user.dob;
                 response.description = user.description;
                 response.phoneNumber = user.phoneNumber;
@@ -112,6 +116,7 @@ namespace Khudmadad_Backend.DbUtils
                 _u.password = user.password;
                 _u.description = user.description;
                 _u.phoneNumber = user.phoneNumber;
+                _u.email = user.email;
 
                 _context.SaveChanges();
                 return true;

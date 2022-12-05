@@ -18,7 +18,6 @@ namespace Khudmadad_Backend.Efcore
         [DataType(DataType.Currency)]
         public double pay { get; set; }
 
-        [AllowNull]
         public bool status { get; set; }
     }
 }

@@ -16,6 +16,7 @@ namespace Khudmadad_Backend.EfCore
         public int creatorId { get; set; }
         public Users Creator { get; set; }
 
+        public string gigName { get; set; }
         public string description { get; set; }
 
         [DataType(DataType.DateTime)]
